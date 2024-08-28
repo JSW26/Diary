@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diary</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            transition: background-color 0.3s, color 0.3s;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .light-mode {
+            background-color: #ffffff;
+            color: #000000;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .entries {
+            margin-top: 20px;
+        }
+
+        .entry {
+            border: 1px solid #ffffff;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            background-color: #1e1e1e;
+            position: relative;
+            transition: background-color 0.3s;
+            color: #ffffff;
+            white-space: pre-wrap; /* 줄바꿈 및 띄어쓰기 유지 */
+        }
+
+        .entry.light-mode {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            color: #000000;
+        }
+
+        .entry .actions {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+        }
+
+        .entry .actions button {
+            margin-left: 5px;
+            font-size: 14px;
+            padding: 5px 10px;
+            background-color: #333;
+            color: #ffffff;
+            border: 1px solid #ffffff;
+            border-radius: 5px;
+        }
+
+        .entry .actions button:hover {
+            background-color: #555;
+        }
+
+        button {
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 10px;
+            border: 1px solid #ffffff;
+            border-radius: 8px;
+            background-color: #1e1e1e;
+            color: #ffffff;
+            resize: none;
+        }
+
+        textarea.light-mode {
+            background-color: #f9f9f9;
+            color: #000000;
+            border: 1px solid #ddd;
+        }
+
+        .edit-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body class="dark-mode"> <!-- 기본 다크 모드 적용 -->
+    <div class="container">
+        <div class="header">
+            <h1>Diary</h1>
+            <button id="darkModeToggle" onclick="toggleDarkMode()">💡</button>
+        </div>
+
+        <textarea id="diaryEntry" placeholder="오늘의 일기를 작성하세요..."></textarea>
+        <button onclick="addEntry()">일기 추가</button>
+
+        <div class="entries" id="entries">
+            <!-- 일기 항목이 여기에 추가됩니다 -->
+        </div>
+    </div>
+
+    <script>
+        // 다크 모드 토글 함수
+        function toggleDarkMode() {
+            const body = document.body;
+            const isDarkMode = body.classList.toggle('light-mode');
+            const entries = document.querySelectorAll('.entry');
+            const textAreas = document.querySelectorAll('textarea');
+
+            entries.forEach(entry => {
+                entry.classList.toggle('light-mode', isDarkMode);
+            });
+
+            textAreas.forEach(textArea => {
+                textArea.classList.toggle('light-mode', isDarkMode);
+            });
+
+            // 전구 이모티콘 상태 변경
+            const toggleButton = document.getElementById('darkModeToggle');
+            toggleButton.textContent = isDarkMode ? '🌞' : '💡';
+        }
+
+        // 일기 추가 함수
+        function addEntry() {
+            const entryText = document.getElementById('diaryEntry').value;
+            if (entryText.trim() === "") {
+                alert("일기를 작성해주세요!");
+                return;
+            }
+
+            const entryId = Date.now(); // 고유 ID 생성
+            const entryContainer = document.createElement('div');
+            entryContainer.classList.add('entry');
+            entryContainer.dataset.id = entryId;
+            entryContainer.innerHTML = `
+                <div class="entry-content">${entryText}</div>
+                <div class="actions">
+                    <button onclick="editEntry(${entryId})">수정</button>
+                    <button onclick="deleteEntry(${entryId})">삭제</button>
+                </div>
+            `;
+
+            document.getElementById('entries').appendChild(entryContainer);
+            document.getElementById('diaryEntry').value = "";  // 입력 필드 초기화
+
+            saveEntries(); // 일기 추가 후 저장
+        }
+
+        // 일기 수정 함수
+        function editEntry(entryId) {
+            const entryContainer = document.querySelector(`.entry[data-id='${entryId}']`);
+            const entryContent = entryContainer.querySelector('.entry-content');
+            const currentText = entryContent.textContent;
+
+            // 기존 내용을 textarea로 대체
+            const textArea = document.createElement('textarea');
+            textArea.value = currentText;
+            textArea.classList.add('edit-textarea');
+
+            // 저장 버튼 생성 및 이벤트 설정
+            const saveButton = document.createElement('button');
+            saveButton.textContent = "저장";
+            saveButton.onclick = () => {
+                entryContent.textContent = textArea.value;
+                entryContainer.innerHTML = '';
+                entryContainer.appendChild(entryContent);
+                const actionsContainer = document.createElement('div');
+                actionsContainer.classList.add('actions');
+                actionsContainer.innerHTML = `
+                    <button onclick="editEntry(${entryId})">수정</button>
+                    <button onclick="deleteEntry(${entryId})">삭제</button>
+                `;
+                entryContainer.appendChild(actionsContainer);
+                saveEntries(); // 수정 후 저장
+            };
+
+            // 기존 내용을 textarea로 대체하고 저장 버튼 추가
+            const editContainer = document.createElement('div');
+            editContainer.classList.add('edit-container');
+            editContainer.appendChild(textArea);
+            editContainer.appendChild(saveButton);
+            entryContainer.innerHTML = ''; // 기존 내용 삭제
+            entryContainer.appendChild(editContainer);
+        }
+
+        // 일기 삭제 함수
+        function deleteEntry(entryId) {
+            if (confirm("정말로 이 일기를 삭제하시겠습니까?")) {
+                document.querySelector(`.entry[data-id='${entryId}']`).remove();
+                saveEntries(); // 삭제 후 저장
+            }
+        }
+
+        // 일기 저장 함수 (로컬 스토리지에 저장)
+        function saveEntries() {
+            const entries = document.querySelectorAll('.entry');
+            const entriesArray = Array.from(entries).map(entry => ({
+                id: entry.dataset.id,
+                text: entry.querySelector('.entry-content').textContent
+            }));
+            localStorage.setItem('diaryEntries', JSON.stringify(entriesArray));
+        }
+
+        // 저장된 일기 불러오기 함수
+        function loadEntries() {
+            const savedEntries = JSON.parse(localStorage.getItem('diaryEntries')) || [];
+            savedEntries.forEach(entry => {
+                const entryContainer = document.createElement('div');
+                entryContainer.classList.add('entry');
+                entryContainer.dataset.id = entry.id;
+                entryContainer.innerHTML = `
+                    <div class="entry-content">${entry.text}</div>
+                    <div class="actions">
+                        <button onclick="editEntry(${entry.id})">수정</button>
+                        <button onclick="deleteEntry(${entry.id})">삭제</button>
+                    </div>
+                `;
+                document.getElementById('entries').appendChild(entryContainer);
+            });
+        }
+
+        // 페이지 로드 시 저장된 일기 불러오기
+        window.onload = loadEntries;
+    </script>
+</body>
+</html>
