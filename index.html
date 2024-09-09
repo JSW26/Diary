@@ -2,255 +2,119 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Diary</title>
+    <title>일기 페이지</title>
     <style>
+        /* 전체 페이지 다크모드 스타일 */
         body {
-            font-family: Arial, sans-serif;
             background-color: #121212;
-            color: #ffffff;
-            transition: background-color 0.3s, color 0.3s;
+            color: #e0e0e0;
+            font-family: 'Arial', sans-serif;
             margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        /* 헤더 스타일 */
+        header {
+            background-color: #1f1f1f;
             padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid #333;
         }
 
-        .light-mode {
-            background-color: #ffffff;
-            color: #000000;
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            color: #ffffff;
         }
 
+        /* 컨테이너 스타일 */
         .container {
-            max-width: 800px;
-            margin: auto;
+            max-width: 1500px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        /* 일기 본문 스타일 */
+        .entry {
             margin-bottom: 20px;
         }
 
-        .entries {
-            margin-top: 20px;
-        }
-
-        .entry {
-            border: 1px solid #ffffff;
-            padding: 15px;
-            margin-bottom: 15px;
-            border-radius: 8px;
-            background-color: #1e1e1e;
-            position: relative;
-            transition: background-color 0.3s;
-            color: #ffffff;
-            white-space: pre-wrap; /* 줄바꿈 및 띄어쓰기 유지 */
-        }
-
-        .entry.light-mode {
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-            color: #000000;
-        }
-
-        .entry .actions {
-            position: absolute;
-            right: 10px;
-            top: 10px;
-        }
-
-        .entry .actions button {
-            margin-left: 5px;
-            font-size: 14px;
-            padding: 5px 10px;
-            background-color: #333;
-            color: #ffffff;
-            border: 1px solid #ffffff;
-            border-radius: 5px;
-        }
-
-        .entry .actions button:hover {
-            background-color: #555;
-        }
-
-        button {
-            padding: 10px 15px;
-            font-size: 16px;
-            cursor: pointer;
-            border: none;
-            background-color: #007bff;
-            color: white;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        textarea {
-            width: 100%;
-            height: 100px;
-            padding: 10px;
-            font-size: 16px;
+        .entry h2 {
+            font-size: 1.5rem;
             margin-bottom: 10px;
-            border: 1px solid #ffffff;
-            border-radius: 8px;
-            background-color: #1e1e1e;
-            color: #ffffff;
-            resize: none;
+            color: #bb86fc;
         }
 
-        textarea.light-mode {
-            background-color: #f9f9f9;
-            color: #000000;
-            border: 1px solid #ddd;
+        .entry p {
+            font-size: 1rem;
+            margin-bottom: 15px;
         }
 
-        .edit-container {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+        /* Preformatted text style */
+        pre {
+            background-color: #2b2b2b;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            white-space: pre-wrap; /* 줄바꿈 */
+            word-wrap: break-word; /* 긴 단어를 줄바꿈 */
+            font-family: 'Courier New', Courier, monospace;
+            color: #e0e0e0;
+            line-height: 1.4;
+        }
+
+        /* 버튼 스타일 */
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 1rem;
+            color: #121212;
+            background-color: #bb86fc;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #9a68db;
         }
     </style>
 </head>
-<body class="dark-mode"> <!-- 기본 다크 모드 적용 -->
+<body>
+
+    <header>
+        <h1>일기</h1>
+    </header>
+
     <div class="container">
-        <div class="header">
-            <h1>Diary</h1>
-            <button id="darkModeToggle" onclick="toggleDarkMode()">💡</button>
-        </div>
+        <div class="entry">
+            <h2>2024년 9월 10일</h2>
+            <pre>이 텍스트 파일은 이 나이 쳐먹고 아무것도 해둔 것 없는 스스로를 자기위로할 겸 기록해두면 언젠가는 쓸모있지 않을까 하여 작성하기 시작하였다.
 
-        <textarea id="diaryEntry" placeholder="오늘의 일기를 작성하세요..."></textarea>
-        <button onclick="addEntry()">일기 추가</button>
-
-        <div class="entries" id="entries">
-            <!-- 일기 항목이 여기에 추가됩니다 -->
+24.9.10 새벽 2시 40분경 추석을 앞두고 지난번 집을 약 한달간 비웠을 때 집에 습기로 인해 곰팡이가 핀 것을 떠올리며 습도에 대한 대책이 필요하다는 생각을 했다.
+그래서 생각한게 wifi는 항상 켜져있으니 원격으로 습도를 조절할 수 있지 않을까. 생각한 방법은 다음과 같다 :
+큰 틀 : 습도를 측정하고 원격으로 확인하여 일정 습도가 넘으면 무언가를 조작하여 습도를 낮춘다.
+	낮추는 방법은 에어컨, 화장실 환풍기, 제습기 등이 있다. 여기서 제습기는 없고 에어컨은 좋은 방법이 안떠올라 패스. 화장실 환풍기 버튼 on off로 채택
+필요한 것 : 아두이노, 습도측정유닛, 환풍기 버튼 조작이 가능한 물리적 스위치
+우선 아두이노로 환풍기 버튼이 눌릴만한 크기의 물리적 버튼 조작이 가능한지 찾아본다 -> 서보모터가 적당할 것 같다.
+습도 측적으로는 온습도 센서를 사용 : DHT11은 대중적이고 저렴하나 정확도가 상대적으로 낮음. 이에 DHT22(온도 +-0.5, 습도 +-2)를 채택
+우선 물리적인 부분은 대충 조사가 끝난것 같다. 습도는 DHT22를, 모터는 서보모터를 쓰면 된다. 이제 원격제어를 할 방법을 찾아보자.
+찾아보니 Blynk라는 앱이 자제서버를 통해 인터넷으로 경유시켜줄 수 있다고 한다. 개인 서버가 없는 나 같은 일반인에겐 이게 제일 괜찮을 것 같다.
+생각해보니 항상 켜져있어야 하는데 이러면 전력소모가 꽤 클것이다. 배터리로 사용할 예정이었는데 며칠 못가면 의미가 없다. -> 슬립모드 코드가 있다. 나중에 해보자
+보드는 NodeMCU로 결정했다. 
+대충 사야할 것들이 정해졌다. NodeMCU, 서보모터 2개, DHT22. -> 24.9.10 새벽 3시 38분 쿠팡으로 구매 완료. 배송은 좀 느린듯
+https://kgu0724.tistory.com/144    <- NodeMCU에 블링크 설치하기
+https://kgu0724.tistory.com/145?category=732606     <- 서보모터랑 NodeMCU 여차여차</pre>
         </div>
     </div>
 
-    <script>
-        // 다크 모드 토글 함수
-        function toggleDarkMode() {
-            const body = document.body;
-            const isDarkMode = body.classList.toggle('light-mode');
-            const entries = document.querySelectorAll('.entry');
-            const textAreas = document.querySelectorAll('textarea');
-
-            entries.forEach(entry => {
-                entry.classList.toggle('light-mode', isDarkMode);
-            });
-
-            textAreas.forEach(textArea => {
-                textArea.classList.toggle('light-mode', isDarkMode);
-            });
-
-            // 전구 이모티콘 상태 변경
-            const toggleButton = document.getElementById('darkModeToggle');
-            toggleButton.textContent = isDarkMode ? '🌞' : '💡';
-        }
-
-        // 일기 추가 함수
-        function addEntry() {
-            const entryText = document.getElementById('diaryEntry').value;
-            if (entryText.trim() === "") {
-                alert("일기를 작성해주세요!");
-                return;
-            }
-
-            const entryId = Date.now(); // 고유 ID 생성
-            const entryContainer = document.createElement('div');
-            entryContainer.classList.add('entry');
-            entryContainer.dataset.id = entryId;
-            entryContainer.innerHTML = `
-                <div class="entry-content">${entryText}</div>
-                <div class="actions">
-                    <button onclick="editEntry(${entryId})">수정</button>
-                    <button onclick="deleteEntry(${entryId})">삭제</button>
-                </div>
-            `;
-
-            document.getElementById('entries').appendChild(entryContainer);
-            document.getElementById('diaryEntry').value = "";  // 입력 필드 초기화
-
-            saveEntries(); // 일기 추가 후 저장
-        }
-
-        // 일기 수정 함수
-        function editEntry(entryId) {
-            const entryContainer = document.querySelector(`.entry[data-id='${entryId}']`);
-            const entryContent = entryContainer.querySelector('.entry-content');
-            const currentText = entryContent.textContent;
-
-            // 기존 내용을 textarea로 대체
-            const textArea = document.createElement('textarea');
-            textArea.value = currentText;
-            textArea.classList.add('edit-textarea');
-
-            // 저장 버튼 생성 및 이벤트 설정
-            const saveButton = document.createElement('button');
-            saveButton.textContent = "저장";
-            saveButton.onclick = () => {
-                entryContent.textContent = textArea.value;
-                entryContainer.innerHTML = '';
-                entryContainer.appendChild(entryContent);
-                const actionsContainer = document.createElement('div');
-                actionsContainer.classList.add('actions');
-                actionsContainer.innerHTML = `
-                    <button onclick="editEntry(${entryId})">수정</button>
-                    <button onclick="deleteEntry(${entryId})">삭제</button>
-                `;
-                entryContainer.appendChild(actionsContainer);
-                saveEntries(); // 수정 후 저장
-            };
-
-            // 기존 내용을 textarea로 대체하고 저장 버튼 추가
-            const editContainer = document.createElement('div');
-            editContainer.classList.add('edit-container');
-            editContainer.appendChild(textArea);
-            editContainer.appendChild(saveButton);
-            entryContainer.innerHTML = ''; // 기존 내용 삭제
-            entryContainer.appendChild(editContainer);
-        }
-
-        // 일기 삭제 함수
-        function deleteEntry(entryId) {
-            if (confirm("정말로 이 일기를 삭제하시겠습니까?")) {
-                document.querySelector(`.entry[data-id='${entryId}']`).remove();
-                saveEntries(); // 삭제 후 저장
-            }
-        }
-
-        // 일기 저장 함수 (로컬 스토리지에 저장)
-        function saveEntries() {
-            const entries = document.querySelectorAll('.entry');
-            const entriesArray = Array.from(entries).map(entry => ({
-                id: entry.dataset.id,
-                text: entry.querySelector('.entry-content').textContent
-            }));
-            localStorage.setItem('diaryEntries', JSON.stringify(entriesArray));
-        }
-
-        // 저장된 일기 불러오기 함수
-        function loadEntries() {
-            const savedEntries = JSON.parse(localStorage.getItem('diaryEntries')) || [];
-            savedEntries.forEach(entry => {
-                const entryContainer = document.createElement('div');
-                entryContainer.classList.add('entry');
-                entryContainer.dataset.id = entry.id;
-                entryContainer.innerHTML = `
-                    <div class="entry-content">${entry.text}</div>
-                    <div class="actions">
-                        <button onclick="editEntry(${entry.id})">수정</button>
-                        <button onclick="deleteEntry(${entry.id})">삭제</button>
-                    </div>
-                `;
-                document.getElementById('entries').appendChild(entryContainer);
-            });
-        }
-
-        // 페이지 로드 시 저장된 일기 불러오기
-        window.onload = loadEntries;
-    </script>
 </body>
 </html>
